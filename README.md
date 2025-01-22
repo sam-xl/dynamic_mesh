@@ -8,9 +8,11 @@ Published topics:
 
 Parameters:
 - pcl_frequency (int): The **expected** frequency at which the input_cloud topic is coming
-- decay (double):
+- decay (int): The number of seconds to keep buffering the pointcloud  
 
 ## example usage
 ```bash
 ros2 run dynamic_mesh pcl_buffer_node --ros-args -r input_cloud:=/transformed_pointcloud -r output_mesh:=/cloud_mesh
 ```
+
+<img src="demo.gif">
