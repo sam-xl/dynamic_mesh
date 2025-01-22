@@ -27,7 +27,7 @@ ament_target_dependencies(pcl_buffer
 )
 
 
-install(DIRECTORY include/
+install(DIRECTORY include/${PROJECT_NAME}
   DESTINATION include)
 
 install(TARGETS pcl_buffer
