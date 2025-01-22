@@ -1,6 +1,31 @@
 # dynamic_mesh
 A ROS package that creates a filtered moving mesh from an incoming pointcloud topic. 
 
+<img src="demo.gif">
+
+Author, Maintainer: Nikhil Sethi
+
+## Build
+```bash
+# clone repo
+mkdir -p ros2_ws/src
+cd ros2_ws/src
+git clone git@gitlab.tudelft.nl:niksethi/dynamic_mesh.git
+
+# install dependencies
+rosdep update
+rosdep install --from-paths src --ignore-src -r -y
+
+# build
+colcon build --symlink-install --merge-install
+```
+## Run
+```bash
+source install/setup.bash
+ros2 run dynamic_mesh pcl_buffer_node --ros-args -r input_cloud:=/transformed_pointcloud -r output_mesh:=/cloud_mesh -p decay_time:=1
+```
+
+## Node
 Subscribed topics:
 - input_cloud (sensor_msgs/PointCloud2): The pointcloud from which the mesh will be made
 
@@ -12,9 +37,7 @@ Parameters:
 - decay_time (int, 1): The number of seconds to keep buffering the pointcloud  
 - frame_id (string, "world"): The frame in which the mesh topic will be published
 
-## example usage
-```bash
-ros2 run dynamic_mesh pcl_buffer_node --ros-args -r input_cloud:=/transformed_pointcloud -r output_mesh:=/cloud_mesh -p decay_time:=1
-```
 
-<img src="demo.gif">
+**Details**: The node works by accepting pointclouds on a topic, filtering them using voxel grids, and buffering them up into a FIFO buffer. The buffer length is determined by incoming frequncy and the decay time. 
+
+The process is memory efficient because, each pointcloud is filtered before being pushed into the buffer, so the overall global buffer size remains small. 
