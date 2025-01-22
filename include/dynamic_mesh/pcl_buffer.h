@@ -7,6 +7,11 @@
 
 #include <chrono>
 
+#define DEFAULT_DECAY_TIME 1
+#define DEFAULT_PCL_FREQ 400
+#define DEFAULT_FRAME_ID "world"
+
+
 template <typename T>
 class Buffer{
     public:
@@ -29,6 +34,11 @@ class Buffer{
         int size(){
             return _buffer.size();
         }
+
+        void set_max_size(int val){
+            _max_size = val;
+        }
+
     protected:
         std::list<T> _buffer;
     private:
