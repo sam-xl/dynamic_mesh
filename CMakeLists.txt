@@ -18,7 +18,7 @@ find_package(geometry_msgs REQUIRED)
 
 include_directories(include)
 
-add_executable(pcl_buffer test/test_pcl_buffer.cpp)
+add_executable(pcl_buffer_node src/pcl_buffer_node.cpp)
 ament_target_dependencies(pcl_buffer 
   pcl_ros
   pcl_conversions
@@ -30,7 +30,7 @@ ament_target_dependencies(pcl_buffer
 install(DIRECTORY include/${PROJECT_NAME}
   DESTINATION include)
 
-install(TARGETS pcl_buffer
+install(TARGETS pcl_buffer_node
   DESTINATION lib/${PROJECT_NAME})
 
 if(BUILD_TESTING)
