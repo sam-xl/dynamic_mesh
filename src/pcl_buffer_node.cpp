@@ -41,3 +41,17 @@ public:
         rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr pcl_pub;
         PCLBuffer<PointType> buffer;
 };
+
+int main(int argc, char **argv)
+{
+    rclcpp::init(argc, argv);
+
+    int decay_time = 1; // seconds
+    int input_frequency = 400; // Hz
+
+    rclcpp::spin(std::make_shared<PCLBufferNode<pcl::PointXYZI>>(decay_time, input_frequency));
+
+    rclcpp::shutdown();
+
+    return 0;
+}
