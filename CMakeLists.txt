@@ -19,7 +19,7 @@ find_package(geometry_msgs REQUIRED)
 include_directories(include)
 
 add_executable(pcl_buffer_node src/pcl_buffer_node.cpp)
-ament_target_dependencies(pcl_buffer 
+ament_target_dependencies(pcl_buffer_node 
   pcl_ros
   pcl_conversions
   rclcpp
