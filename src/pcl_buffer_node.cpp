@@ -27,7 +27,7 @@ class PCLBufferNode : public rclcpp::Node{
             pcl_sub = this->create_subscription<sensor_msgs::msg::PointCloud2>("input_cloud", 10, std::bind(&PCLBufferNode::pcl_callback, this, std::placeholders::_1));
             pcl_pub = this->create_publisher<sensor_msgs::msg::PointCloud2>("output_mesh", 10);
 
-            this->get_logger().info("Started pcl buffer node.")
+            RCLCPP_INFO(this->get_logger(), "Started pcl buffer node.");
         }
 
         void pcl_callback(const sensor_msgs::msg::PointCloud2 &msg)

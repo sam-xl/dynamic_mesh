@@ -23,12 +23,3 @@ int TEST_max_size()
 }
 
 
-int main(int argc, char **argv)
-{
-    rclcpp::init(argc, argv);
-    rclcpp::spin(std::make_shared<PCLBufferNode<pcl::PointXYZI>>(1, 400));
-
-    rclcpp::shutdown();
-
-    return 0;
-}
