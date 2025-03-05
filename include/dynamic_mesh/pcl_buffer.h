@@ -71,5 +71,5 @@ class PCLBuffer: public Buffer<std::shared_ptr<pcl::PointCloud<T>>>{
         }
 
     private:
-        std::array<float, 3> leaf_size = {0.0005f, 0.0005f, 0.0005f};
+        std::array<float, 3> leaf_size = {0.0002f, 0.0002f, 0.0002f};
 };
