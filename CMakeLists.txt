@@ -15,6 +15,7 @@ find_package(rclcpp REQUIRED)
 find_package(pcl_ros REQUIRED)
 find_package(pcl_conversions REQUIRED)
 find_package(sensor_msgs REQUIRED)
+find_package(tf2_sensor_msgs REQUIRED)
 
 include_directories(include)
 
@@ -24,6 +25,7 @@ ament_target_dependencies(pcl_buffer_node
   pcl_conversions
   rclcpp
   sensor_msgs
+  tf2_sensor_msgs
 )
 
 
