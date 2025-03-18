@@ -43,9 +43,9 @@ class PCLBufferNode : public rclcpp::Node{
         {   
             // Transform the point cloud
             if (_do_transform){
+                geometry_msgs::msg::TransformStamped transform_stamped;
                 try{
-                    geometry_msgs::msg::TransformStamped transform_stamped =
-                    tf_buffer_.lookupTransform(_frame_id, msg->header.frame_id, tf2::TimePointZero);
+                    transform_stamped = tf_buffer_.lookupTransform(_frame_id, msg->header.frame_id, tf2::TimePointZero);
                 }
                 catch(const tf2::LookupException& e){
                     std::cerr <<"Lookup transform failed: "<< e.what() <<" Trying again.."<< '\n';
