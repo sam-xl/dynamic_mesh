@@ -1,0 +1,48 @@
+name: erf_demo
+services:
+  dynamic_mesh_gen:
+    image: scancontrol:latest
+    container_name: dynamic_mesh_gen
+
+    volumes:
+          ## Workspace and working files
+      - type: bind
+        source: ${DYNAMIC_MESH_GEN_SRC_HOST_DIR:-/home/coresense/workspaces/erf_ws/src/dynamic_mesh}
+        target: ${DYNAMIC_MESH_GEN_SRC_CONTAINER_DIR:-/home/coresense/workspaces/mesh_ws/src/dynamic_mesh}
+            # Optional: cache build artefacts for faster rebuilds
+      - type: bind
+        source: ${HOST_WORKSPACE_FOLDER:-/workspaces/erf_ws}/tmp/dynamic_mesh/ws_cache
+        target: ${CONTAINER_DEV_WORKSPACE}
+        #
+    environment:
+      DEV_WORKSPACE: ${CONTAINER_DEV_WORKSPACE:-/workspaces/mesh_ws}
+
+    env_file:
+      - path: variables.env
+        required: true # default
+
+    network_mode: host
+
+    entrypoint: ${DYNAMIC_MESH_GEN_SRC_CONTAINER_DIR}/entrypoint.sh
+
+    working_dir: ${CONTAINER_DEV_WORKSPACE:-/workspaces/mesh_ws}
+
+    user: ${PUID:-1000}:${PGID:-1000}
+
+    ipc: host
+
+
+    mem_limit: 12gb # TODO confirm this
+
+    post_start:
+      # Change the ownership of the workspace mount points to the non-root user 
+      - command: find "$CONTAINER_DEV_WORKSPACE" -maxdepth 2 -exec chown
+          ${PUID:-1000}:${PGID:-1000} {} \;
+        user: root
+      - command: find "/home/ros/dependencies_ws" -maxdepth 2 -exec chown
+          ${PUID:-1000}:${PGID:-1000} {} \;
+        user: root
+
+    privileged: true
+
+    tty: true
