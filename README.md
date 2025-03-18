@@ -1,10 +1,26 @@
-# dynamic_mesh
+# dynamic_mesh<!-- omit in toc -->
 
 A ROS package that creates a filtered moving mesh from an incoming pointcloud topic.
+
+- [Quickstart](#quickstart)
+- [Build](#build)
+- [Run](#run)
+- [Node](#node)
 
 <img src="demo.gif">
 
 Author, Maintainer: Nikhil Sethi
+
+## Quickstart
+
+To run with docker compose:
+
+```sh
+cd $DEV_WORKSPACE/src/dynamic_mesh
+docker compose up -d
+```
+
+This will launch a container, in which it will automatically perform the build and launch options described below.
 
 ## Build
 
