@@ -12,10 +12,10 @@ services:
             # Optional: cache build artefacts for faster rebuilds
       - type: bind
         source: ${HOST_WORKSPACE_FOLDER:-/workspaces/erf_ws}/tmp/dynamic_mesh/ws_cache
-        target: ${CONTAINER_DEV_WORKSPACE}
+        target: ${DYNAMIC_MESH_GEN_TARGET_WS}
         #
     environment:
-      DEV_WORKSPACE: ${CONTAINER_DEV_WORKSPACE:-/workspaces/mesh_ws}
+      DEV_WORKSPACE: ${DYNAMIC_MESH_GEN_TARGET_WS:-/workspaces/mesh_ws}
 
     env_file:
       - path: variables.env
@@ -25,7 +25,7 @@ services:
 
     entrypoint: ${DYNAMIC_MESH_GEN_SRC_CONTAINER_DIR}/entrypoint.sh
 
-    working_dir: ${CONTAINER_DEV_WORKSPACE:-/workspaces/mesh_ws}
+    working_dir: ${DYNAMIC_MESH_GEN_TARGET_WS:-/workspaces/mesh_ws}
 
     user: ${PUID:-1000}:${PGID:-1000}
 
@@ -36,7 +36,7 @@ services:
 
     post_start:
       # Change the ownership of the workspace mount points to the non-root user 
-      - command: find "$CONTAINER_DEV_WORKSPACE" -maxdepth 2 -exec chown
+      - command: find "$DYNAMIC_MESH_GEN_TARGET_WS" -maxdepth 2 -exec chown
           ${PUID:-1000}:${PGID:-1000} {} \;
         user: root
       - command: find "/home/ros/dependencies_ws" -maxdepth 2 -exec chown
