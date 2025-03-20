@@ -1,0 +1,50 @@
+name: erf_demo
+services:
+  dynamic_mesh_gen:
+
+    build: 
+      context: ${HOST_WORKSPACE_FOLDER}
+      dockerfile_inline: |
+        FROM scancontrol:latest
+
+        ENV DYNAMIC_MESH_CACHED_DEV_WORKSPACE=/workspaces/cached_target_ws
+        ENV DYNAMIC_MESH_CACHED_SRC_DIR=${DYNAMIC_MESH_CACHED_DEV_WORKSPACE}/src/dynamic_mesh
+
+        USER ros
+
+        RUN mkdir -p ${DYNAMIC_MESH_CACHED_SRC_DIR}
+
+        WORKDIR ${DYNAMIC_MESH_CACHED_SRC_DIR}
+        
+        ADD src/dynamic_mesh .
+
+        WORKDIR ${DYNAMIC_MESH_CACHED_DEV_WORKSPACE}
+
+        RUN /bin/bash -c ${DYNAMIC_MESH_CACHED_SRC_DIR}/container/docker_compose/scripts/build_app.sh -t ${DYNAMIC_MESH_CACHED_DEV_WORKSPACE}
+
+    image: erf2025/dynamic_mesh_c
+    container_name: dynamic_mesh_gen_c
+    # entrypoint: tail -f /dev/null
+    entrypoint: ${DYNAMIC_MESH_CACHED_SRC_DIR}/container/docker_compose/scripts/run_app.sh -t ${DYNAMIC_MESH_CACHED_DEV_WORKSPACE}
+
+    environment:
+      DEV_WORKSPACE: ${DYNAMIC_MESH_GEN_TARGET_WS:-/workspaces/mesh_ws}
+      CACHED_DEV_WORKSPACE: ${DYNAMIC_MESH_CACHED_SRC_DIR}
+
+    env_file:
+      - path: variables.env
+        required: true # default
+
+    network_mode: host
+
+    working_dir: ${DYNAMIC_MESH_CACHED_DEV_WORKSPACE:-/workspaces/mesh_ws}
+
+    user: ${PUID:-1000}:${PGID:-1000}
+
+    ipc: host
+
+    mem_limit: 12gb # TODO confirm this
+
+    privileged: true
+
+    tty: true

@@ -1,9 +1,36 @@
 #! /bin/bash
 
-cd "${DEV_WORKSPACE}" || exit
+SOURCE_WS="$DEV_WORKSPACE"
+
+USAGE="
+build.sh usage
+
+-t <path> \
+SOURCE_WS: the location of the workspace you wish to cache inside an image
+
+"
+
+while getopts t:h flag; do
+    case "${flag}" in
+    t) SOURCE_WS=${OPTARG} ;;
+    h)
+        echo -e "${USAGE}"
+        exit 0
+        ;;
+    *)
+        echo 'Unknown parameter' >&2
+        echo 'use -h for usage information'
+        exit 1
+        ;;
+    esac
+done
+
+echo "Target workspace: ${SOURCE_WS}"
+
+cd "${SOURCE_WS}" || exit
 
 source ~/.bashrc
-source install/setup.bash
+source "${SOURCE_WS}/install/setup.bash"
 
 # launch processes here
 
