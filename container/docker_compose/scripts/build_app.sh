@@ -1,11 +1,35 @@
-#! /bin/bash
+#!/bin/bash
 
-cd "${DEV_WORKSPACE}" || exit
+SOURCE_WS="$DEV_WORKSPACE"
+
+USAGE="
+build.sh usage
+
+-t <path> \
+SOURCE_WS: the location of the workspace you wish to cache inside an image
+
+"
+
+while getopts t:h flag; do
+    case "${flag}" in
+    t) SOURCE_WS=${OPTARG} ;;
+    h)
+        echo -e "${USAGE}"
+        exit 0
+        ;;
+    *)
+        echo 'Unknown parameter' >&2
+        echo 'use -h for usage information'
+        exit 1
+        ;;
+    esac
+done
+
+echo "Target workspace: ${SOURCE_WS}"
+
+cd "${SOURCE_WS}" || exit
 
 # Auto-build everything in the background:
-# export ROSDEP_SKIP_KEYS=snp_msgs 
-# "${DEV_WORKSPACE}"/src/dynamic_mesh/setup.sh -t "${DEV_WORKSPACE}"
-
 source /opt/ros/humble/setup.bash
 
 # install dependencies
