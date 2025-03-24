@@ -1,35 +1,22 @@
-name: erf_demo
+
 services:
   dynamic_mesh_gen:
 
     build: 
-      context: ${HOST_WORKSPACE_FOLDER}
-      dockerfile_inline: |
-        FROM scancontrol:latest
+      context: ${HOST_WORKSPACE_FOLDER:-/CHANGEMEws}
+      args:
+        DYNAMIC_MESH_TARGET_WORKSPACE: "/CHANGEME_ws"
+        DYNAMIC_MESH_SRC_SUBDIR: "src/dynamic_mesh"
+      dockerfile: ${HOST_WORKSPACE_FOLDER}/${DYNAMIC_MESH_SRC_SUBDIR}/container/docker_compose/build.Dockerfile
 
-        ENV DYNAMIC_MESH_CACHED_DEV_WORKSPACE=/workspaces/cached_target_ws
-        ENV DYNAMIC_MESH_CACHED_SRC_DIR=${DYNAMIC_MESH_CACHED_DEV_WORKSPACE}/src/dynamic_mesh
-
-        USER ros
-
-        RUN mkdir -p ${DYNAMIC_MESH_CACHED_SRC_DIR}
-
-        WORKDIR ${DYNAMIC_MESH_CACHED_SRC_DIR}
-        
-        ADD src/dynamic_mesh .
-
-        WORKDIR ${DYNAMIC_MESH_CACHED_DEV_WORKSPACE}
-
-        RUN /bin/bash -c ${DYNAMIC_MESH_CACHED_SRC_DIR}/container/docker_compose/scripts/build_app.sh -t ${DYNAMIC_MESH_CACHED_DEV_WORKSPACE}
-
-    image: erf2025/dynamic_mesh_c
+    image: erf2025.demo/dynamic_mesh_c
     container_name: dynamic_mesh_gen_c
     # entrypoint: tail -f /dev/null
-    entrypoint: ${DYNAMIC_MESH_CACHED_SRC_DIR}/container/docker_compose/scripts/run_app.sh -t ${DYNAMIC_MESH_CACHED_DEV_WORKSPACE}
+    entrypoint: ${DYNAMIC_MESH_SRC_SUBDIR}/container/docker_compose/scripts/run_app.sh -t ${DYNAMIC_MESH_SRC_SUBDIR}
 
     environment:
-      DEV_WORKSPACE: ${DYNAMIC_MESH_GEN_TARGET_WS:-/workspaces/mesh_ws}
-      CACHED_DEV_WORKSPACE: ${DYNAMIC_MESH_CACHED_SRC_DIR}
+      DEV_WORKSPACE: ${DYNAMIC_MESH_TARGET_WS:-/workspaces/mesh_ws}
+      CACHED_DEV_WORKSPACE: ${DYNAMIC_MESH_SRC_SUBDIR}
 
     env_file:
       - path: variables.env
@@ -37,7 +24,7 @@ services:
 
     network_mode: host
 
-    working_dir: ${DYNAMIC_MESH_CACHED_DEV_WORKSPACE:-/workspaces/mesh_ws}
+    working_dir: ${DYNAMIC_MESH_SRC_SUBDIR:-/workspaces/mesh_ws}
 
     user: ${PUID:-1000}:${PGID:-1000}
 

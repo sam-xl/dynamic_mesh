@@ -1,0 +1,7 @@
+
+services:
+
+  dynamic_mesh_gen:
+    extends:
+      file: ./container/docker_compose/build.dynamic_mesh.docker-compose.yaml
+      service: dynamic_mesh_gen
