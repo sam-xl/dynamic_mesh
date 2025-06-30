@@ -1,0 +1,5 @@
+services:
+  dynamic_mesh_server:
+    extends:
+      file: services/dynamic_mesh_server/compose.yaml
+      service: dynamic_mesh_server
